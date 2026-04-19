@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QRYO — Proteína de origen</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0B0A08;
+    --surface:  #141210;
+    --border:   #2A2825;
+    --chitin:   #C4780F;
+    --chitin-d: #9A5E0A;
+    --text:     #EDE9DF;
+    --muted:    #6B6860;
+    --spore:    #1A3A22;
+    --spore-t:  #4A8A5A;
+    --radius:   6px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Gill Sans', 'Gill Sans MT', Optima, Candara, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+  }
+  nav .inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: Impact, 'Haettenschweiler', 'Arial Narrow', sans-serif;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo span { color: var(--chitin); }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.15s ease;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    font-size: 13px;
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    letter-spacing: 1px;
+    background: var(--chitin);
+    color: var(--bg);
+    border: none;
+    padding: 7px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .nav-cta:hover { background: var(--chitin-d); }
+
+  /* HERO */
+  #hero {
+    padding-top: 52px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-inner {
+    padding: 80px 24px;
+    max-width: 1160px;
+    margin: 0 auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .hero-left {}
+  .hero-tag {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--chitin);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-family: Impact, 'Haettenschweiler', 'Arial Narrow', sans-serif;
+    font-size: 64px;
+    line-height: 1.0;
+    letter-spacing: -1px;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+  .hero-sub {
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 420px;
+    margin-bottom: 32px;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 16px; }
+  .btn-primary {
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    letter-spacing: 1px;
+    font-size: 13px;
+    background: var(--chitin);
+    color: var(--bg);
+    border: none;
+    padding: 10px 22px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--chitin-d); }
+  .btn-outline {
+    font-size: 14px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 9px 20px;
+    border-radius: var(--radius);
+    transition: border-color 0.15s ease, color 0.15s ease;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--muted); color: var(--text); }
+  .hero-right {}
+  .hero-stats {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-cell {
+    padding: 20px 24px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-cell:last-child { border-right: none; }
+  .stat-value {
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    font-size: 32px;
+    color: var(--chitin);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-label { font-size: 12px; color: var(--muted); }
+  .hero-species {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .species-name { font-size: 13px; color: var(--muted); font-style: italic; }
+  .species-origin { font-size: 12px; color: var(--spore-t); }
+
+  /* SECTION COMMON */
+  section { border-bottom: 1px solid var(--border); }
+  .section-header {
+    padding: 40px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+  }
+  .section-title {
+    font-family: Impact, 'Haettenschweiler', 'Arial Narrow', sans-serif;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+  .section-desc { font-size: 14px; color: var(--muted); max-width: 480px; }
+
+  /* PRODUCTS */
+  #productos { padding: 64px 0; }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--border);
+  }
+  .product-card {
+    background: var(--bg);
+    padding: 28px;
+  }
+  .product-line {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--chitin);
+    margin-bottom: 12px;
+  }
+  .product-name {
+    font-family: Impact, 'Haettenschweiler', 'Arial Narrow', sans-serif;
+    font-size: 24px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .product-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+  .product-meta { border-top: 1px solid var(--border); padding-top: 16px; }
+  .product-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 13px;
+  }
+  .product-row-label { color: var(--muted); }
+  .product-row-val { color: var(--text); font-weight: 500; }
+  .product-price {
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    font-size: 20px;
+    color: var(--chitin);
+    margin-top: 14px;
+  }
+  .badge-limited {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--spore-t);
+    color: var(--spore-t);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+
+  /* ORIGEN */
+  #origen { padding: 64px 0; }
+  .origen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .origen-text p { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+  .origen-text strong { color: var(--text); font-weight: 500; }
+  .origen-data {}
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+  }
+  .data-table td {
+    padding: 12px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .data-table td:first-child { color: var(--muted); width: 50%; }
+  .data-table td:last-child { color: var(--text); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .highlight-val {
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    font-size: 18px;
+    color: var(--chitin);
+  }
+
+  /* PROCESO */
+  #proceso { padding: 64px 0; }
+  .steps-list { list-style: none; }
+  .step-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    font-size: 28px;
+    color: var(--border);
+    line-height: 1;
+    padding-top: 2px;
+    user-select: none;
+  }
+  .step-content {}
+  .step-title { font-size: 16px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  .step-desc { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .step-detail {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 10px;
+    color: var(--muted);
+  }
+
+  /* NUTRICION */
+  #nutricion { padding: 64px 0; }
+  .nutrition-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .nutrition-panel { background: var(--bg); padding: 28px; }
+  .nutrition-panel-title {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+  .nutrition-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .nutrition-row:last-child { border-bottom: none; }
+  .nutrition-row-name { color: var(--muted); }
+  .nutrition-row-val { color: var(--text); }
+  .nutrition-row-val.accent {
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    font-size: 17px;
+    color: var(--chitin);
+  }
+  .compare-table { width: 100%; border-collapse: collapse; }
+  .compare-table th {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    text-align: left;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table td {
+    padding: 11px 0;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .compare-table td:first-child { color: var(--text); }
+  .compare-table tr.highlight-row td { color: var(--text); }
+  .compare-table tr.highlight-row td:first-child { color: var(--chitin); font-weight: 500; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* FCR BAR */
+  .fcr-bar-wrap { display: flex; align-items: center; gap: 10px; }
+  .fcr-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; flex: 1; }
+  .fcr-fill { height: 100%; border-radius: 3px; background: var(--chitin); }
+  .fcr-label { font-size: 13px; color: var(--text); min-width: 32px; text-align: right; }
+
+  /* WAITLIST */
+  #waitlist { padding: 80px 0; }
+  .waitlist-inner {
+    max-width: 520px;
+  }
+  .waitlist-title {
+    font-family: Impact, 'Haettenschweiler', 'Arial Narrow', sans-serif;
+    font-size: 36px;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .waitlist-sub { font-size: 15px; color: var(--muted); margin-bottom: 32px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color 0.15s ease;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus { border-color: var(--chitin); }
+  .form-group input::placeholder { color: var(--muted); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-submit {
+    margin-top: 8px;
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    letter-spacing: 1px;
+    font-size: 14px;
+    background: var(--chitin);
+    color: var(--bg);
+    border: none;
+    padding: 11px 28px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .form-submit:hover { background: var(--chitin-d); }
+  .form-note { font-size: 12px; color: var(--muted); margin-top: 12px; }
+  .success-msg {
+    display: none;
+    padding: 14px 16px;
+    background: var(--spore);
+    border: 1px solid var(--spore-t);
+    border-radius: var(--radius);
+    font-size: 14px;
+    color: var(--spore-t);
+    margin-top: 16px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+  }
+  .footer-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-logo {
+    font-family: Impact, 'Arial Narrow', sans-serif;
+    font-size: 16px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .footer-logo span { color: var(--chitin); }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+  .footer-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+  .footer-links a:hover { color: var(--text); }
+  .footer-copy { font-size: 12px; color: var(--muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-title { font-size: 44px; }
+    .products-grid { grid-template-columns: 1fr; }
+    .origen-grid { grid-template-columns: 1fr; gap: 40px; }
+    .nutrition-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .section-header { flex-direction: column; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="inner">
+    <a href="#" class="nav-logo">QR<span>Y</span>O</a>
+    <ul class="nav-links">
+      <li><a href="#productos">Productos</a></li>
+      <li><a href="#origen">Origen</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#nutricion">Nutrición</a></li>
+      <li><a href="#waitlist" class="nav-cta">Lista de espera</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-tag">Gryllus assimilis · Eje Cafetero, Colombia</div>
+      <div class="hero-title">Proteína<br>de origen.</div>
+      <p class="hero-sub">
+        El 80% de la humanidad nunca dejó de comerlos. Cricket colombiano criado a 1.500 m, alimentado con subproductos de café. Sin rodeos.
+      </p>
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn-primary">Unirse a lista de espera</a>
+        <a href="#productos" class="btn-outline">Ver productos</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-stats">
+        <div class="stat-row">
+          <div class="stat-cell">
+            <div class="stat-value">72g</div>
+            <div class="stat-label">Proteína por 100g (seco)</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-value">1.7x</div>
+            <div class="stat-label">FCR vs. cualquier carne</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-cell">
+            <div class="stat-value">45d</div>
+            <div class="stat-label">Ciclo completo de producción</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-value">100m²</div>
+            <div class="stat-label">Granja piloto activa</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-cell" style="grid-column: span 2;">
+            <div class="stat-value" style="font-size:20px; color: var(--text);">Lote 001 — Cosecha Agosto 2026</div>
+            <div class="stat-label">Disponibilidad limitada · 80 unidades</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-species">
+        <span class="species-name">Gryllus assimilis</span>
+        <span class="species-origin">Eje Cafetero · 1.500 m.s.n.m.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS -->
+<section id="productos">
+  <div class="container" style="padding-top:0; padding-bottom:0;">
+    <div class="section-header">
+      <div class="section-title">Productos</div>
+      <p class="section-desc">Tres formatos. Una sola fuente de proteína. Trazabilidad total de lote.</p>
+    </div>
+  </div>
+  <div class="container" style="padding-bottom: 64px;">
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-line">Foundation</div>
+        <div class="product-name">Harina proteica</div>
+        <p class="product-desc">Cricket molido y tamizado. Sin aditivos. Para cocina, batidos y panificación con proteína real.</p>
+        <div class="product-meta">
+          <div class="product-row">
+            <span class="product-row-label">Contenido</span>
+            <span class="product-row-val">500g</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Proteína por porción (30g)</span>
+            <span class="product-row-val">20g</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Humedad</span>
+            <span class="product-row-val">< 5%</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Sustrato</span>
+            <span class="product-row-val">Subproductos de café</span>
+          </div>
+        </div>
+        <div class="product-price">$18 USD</div>
+      </div>
+
+      <div class="product-card" style="border-left: 2px solid var(--chitin);">
+        <div class="product-line">Field</div>
+        <div class="product-name">Cricket entero tostado</div>
+        <p class="product-desc">Tostado en seco, sazonado en tres versiones. Listo para comer. Más proteína por gramo que el maní.</p>
+        <div class="product-meta">
+          <div class="product-row">
+            <span class="product-row-label">Contenido</span>
+            <span class="product-row-val">50g</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Proteína por bolsa</span>
+            <span class="product-row-val">11g</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Sabores</span>
+            <span class="product-row-val">Natural / Ají+Limón / Cacao+Sal</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Sin alérgenos</span>
+            <span class="product-row-val">Gluten free · Sin soya</span>
+          </div>
+        </div>
+        <div class="product-price">$12 USD</div>
+        <div class="badge-limited">Más vendido</div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-line">Origin</div>
+        <div class="product-name">Kit de degustación</div>
+        <p class="product-desc">Cuatro formatos en una caja. Certificado de origen físico incluido. Para regalar o explorar la línea completa.</p>
+        <div class="product-meta">
+          <div class="product-row">
+            <span class="product-row-label">Incluye</span>
+            <span class="product-row-val">Foundation 100g + Field ×3</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Edición</span>
+            <span class="product-row-val">Lote 001 · 80 unidades</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Certificado</span>
+            <span class="product-row-val">Origen + fecha de cosecha</span>
+          </div>
+          <div class="product-row">
+            <span class="product-row-label">Canal</span>
+            <span class="product-row-val">E-commerce / Gourmet</span>
+          </div>
+        </div>
+        <div class="product-price">$28 USD</div>
+        <div class="badge-limited">Edición limitada</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ORIGEN -->
+<section id="origen">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title">Origen</div>
+      <p class="section-desc">Trazabilidad completa desde la granja hasta el empaque.</p>
+    </div>
+    <div class="origen-grid">
+      <div class="origen-text">
+        <p>
+          El cricket no es una tendencia. Es la fuente de proteína que el 80% de la humanidad nunca dejó de consumir. Occidente es la excepción histórica, no la regla.
+        </p>
+        <p>
+          QRYO opera en el Eje Cafetero colombiano a 1.500 metros sobre el nivel del mar. La temperatura promedio de 28–30°C elimina el costo de calefacción artificial que hace inviables a las granjas europeas. Los residuos de la industria cafetera —pulpa, afrechillo, subproductos del beneficio— se convierten en el sustrato de cría.
+        </p>
+        <p>
+          <strong>El sistema es circular.</strong> Los residuos del café alimentan al cricket. El frass del cricket fertiliza los cultivos. El cultivo produce más café. Nada sale del sistema como desperdicio.
+        </p>
+        <p>
+          Cada lote tiene código único, fecha de cosecha, sustrato usado, y temperatura de ciclo registrada. Escaneás el QR en el empaque y llegás a los datos reales de producción.
+        </p>
+      </div>
+      <div class="origen-data">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Datos reales</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Especie</td>
+              <td><em>Gryllus assimilis</em> (cricket tropical)</td>
+            </tr>
+            <tr>
+              <td>Ubicación</td>
+              <td>Eje Cafetero, Colombia — 1.500 m.s.n.m.</td>
+            </tr>
+            <tr>
+              <td>Temperatura de cría</td>
+              <td>28–32°C natural</td>
+            </tr>
+            <tr>
+              <td>Sustrato alimenticio</td>
+              <td>Salvado de trigo + pulpa de café + frutas de descarte</td>
+            </tr>
+            <tr>
+              <td>Ciclo completo</td>
+              <td>45–60 días (huevo → adulto cosechable)</td>
+            </tr>
+            <tr>
+              <td>FCR (kg alimento / kg masa)</td>
+              <td><span class="highlight-val">1.7 kg</span></td>
+            </tr>
+            <tr>
+              <td>Método de sacrificio</td>
+              <td>Congelación a −18°C / 4h</td>
+            </tr>
+            <tr>
+              <td>Procesamiento</td>
+              <td>Deshidratación 80°C · humedad &lt; 5%</td>
+            </tr>
+            <tr>
+              <td>Subproducto</td>
+              <td>Frass vendido como fertilizante orgánico</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section id="proceso">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title">Cómo se produce</div>
+      <p class="section-desc">Desde la colonia fundadora hasta el empaque sellado al vacío.</p>
+    </div>
+    <ul class="steps-list">
+      <li class="step-item">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Siembra de colonia fundadora</div>
+          <p class="step-desc">500 hembras y 150 machos de Gryllus assimilis con genética seleccionada para cautiverio. Ratio 3:1 hembra/macho para maximizar tasa de puesta sin estrés por competencia.</p>
+          <span class="step-detail">Semana 1 del ciclo · colonia certificada libre de parásitos</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Incubación y eclosión</div>
+          <p class="step-desc">Los huevos se aíslan en recipientes con vermiculita húmeda a 30°C constante. Eclosión en 10–14 días. Las ninfas se transfieren a contenedores con malla de &lt;1mm para evitar fugas.</p>
+          <span class="step-detail">Días 10–14 · temperatura controlada 30°C</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Crecimiento — 8 instares</div>
+          <p class="step-desc">Las crías pasan por 8 mudas en 40–50 días. La alimentación combina 70% seco (salvado + purina avícola) y 30% húmedo (frutas y verduras de descarte). El componente húmedo se rota cada 24 horas para prevenir hongos.</p>
+          <span class="step-detail">Días 14–55 · monitoreo diario de temperatura y mortalidad</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Protocolo de ayuno pre-cosecha</div>
+          <p class="step-desc">48 horas antes de cosechar se retira todo alimento y agua. El tracto digestivo vacío mejora el sabor final y reduce la carga bacteriana en el producto terminado.</p>
+          <span class="step-detail">48h pre-cosecha · estándar de calidad alimentaria</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-title">Sacrificio y deshidratación</div>
+          <p class="step-desc">Congelación a −18°C por 4 horas. Lavado con agua fría, escurrido, deshidratación a 80°C durante 5–6 horas hasta humedad menor al 5%. Sin aditivos ni conservantes en ningún paso.</p>
+          <span class="step-detail">80°C · 5–6 horas · humedad final &lt;5%</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">06</div>
+        <div class="step-content">
+          <div class="step-title">Procesamiento y empaque</div>
+          <p class="step-desc">60% del lote se muele para harina proteica (tamizado 0.5mm). El 40% restante va entero a tostado en seco y sazonado. Empaque al vacío con etiqueta de lote, fecha de cosecha y QR de trazabilidad.</p>
+          <span class="step-detail">Empaque al vacío · etiqueta de lote · QR de origen</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- NUTRICION -->
+<section id="nutricion">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-title">Datos nutricionales</div>
+      <p class="section-desc">Comparado con las fuentes de proteína animal más comunes.</p>
+    </div>
+
+    <div class="nutrition-grid">
+      <div class="nutrition-panel">
+        <div class="nutrition-panel-title">Cricket QRYO — Foundation · por 100g seco</div>
+        <div class="nutrition-row">
+          <span class="nutrition-row-name">Proteína</span>
+          <span class="nutrition-row-val accent">72g</span>
+        </div>
+        <div class="nutrition-row">
+          <span class="nutrition-row-name">Grasa total</span>
+          <span class="nutrition-row-val">14g</span>
+        </div>
+        <div class="nutrition-row">
+          <span class="nutrition-row-name">Carbohidratos</span>
+          <span class="nutrition-row-val">5g</span>
+        </div>
+        <div class="nutrition-row">
+          <span class="nutrition-row-name">Hierro</span>
+          <span class="nutrition-row-val">12mg (67% VD)</span>
+        </div>
+        <div class="nutrition-row">
+          <span class="nutrition-row-name">Calcio</span>
+          <span class="nutrition-row-val">75mg</span>
+        </div>
+        <div class="nutrition-row">
+          <span class="nutrition-row-name">Vitamina B12</span>
+          <span class="nutrition-row-val">Presente</span>
+        </div>
+        <div class="nutrition-row">
+          <span class="nutrition-row-name">Omega-3</span>
+          <span class="nutrition-row-val">380mg / 100g</span>
+        </div>
+        <div class="nutrition-row">
+          <span class="nutrition-row-name">Calorías</span>
+          <span class="nutrition-row-val">430 kcal</span>
+        </div>
+      </div>
+
+      <div class="nutrition-panel">
+        <div class="nutrition-panel-title">Eficiencia de producción — FCR (kg alimento por kg de masa)</div>
+        <div style="margin-bottom: 8px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span style="color:var(--chitin); font-weight:500;">QRYO cricket</span>
+            <span class="fcr-label">1.7</span>
+          </div>
+          <div class="fcr-bar-wrap">
+            <div class="fcr-bar"><div class="fcr-fill" style="width:17%;"></div></div>
+          </div>
+        </div>
+        <div style="margin-bottom: 8px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span style="color:var(--muted);">Pollo</span>
+            <span class="fcr-label">2.5</span>
+          </div>
+          <div class="fcr-bar-wrap">
+            <div class="fcr-bar"><div class="fcr-fill" style="width:25%; background:var(--muted);"></div></div>
+          </div>
+        </div>
+        <div style="margin-bottom: 8px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span style="color:var(--muted);">Cerdo</span>
+            <span class="fcr-label">4.0</span>
+          </div>
+          <div class="fcr-bar-wrap">
+            <div class="fcr-bar"><div class="fcr-fill" style="width:40%; background:var(--muted);"></div></div>
+          </div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
+            <span style="color:var(--muted);">Res</span>
+            <span class="fcr-label">8.0</span>
+          </div>
+          <div class="fcr-bar-wrap">
+            <div class="fcr-bar"><div class="fcr-fill" style="width:80%; background:var(--border);"></div></div>
+          </div>
+        </div>
+        <div style="font-size:12px; color:var(--muted); padding-top:12px; border-top:1px solid var(--border);">
+          Un FCR de 1.7 significa que QRYO convierte 1.7 kg de alimento en 1 kg de masa. La res necesita 8 kg para el mismo resultado.
+        </div>
+      </div>
+    </div>
+
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Fuente de proteína</th>
+          <th>Proteína / 100g</th>
+          <th>Tierra requerida</th>
+          <th>Emisiones CO₂ / kg proteína</th>
+          <th>Agua (litros / kg)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="highlight-row">
+          <td>QRYO cricket</td>
+          <td>72g</td>
+          <td>Mínima</td>
+          <td>~1 kg</td>
+          <td>~10 L</td>
+        </tr>
+        <tr>
+          <td>Pollo</td>
+          <td>27g</td>
+          <td>Moderada</td>
+          <td>~6 kg</td>
+          <td>~4.300 L</td>
+        </tr>
+        <tr>
+          <td>Cerdo</td>
+          <td>25g</td>
+          <td>Alta</td>
+          <td>~12 kg</td>
+          <td>~6.000 L</td>
+        </tr>
+        <tr>
+          <td>Res (carne)</td>
+          <td>26g</td>
+          <td>Muy alta</td>
+          <td>~300 kg</td>
+          <td>~15.400 L</td>
+        </tr>
+        <tr>
+          <td>Soya (referencia)</td>
+          <td>36g</td>
+          <td>Alta</td>
+          <td>~2 kg</td>
+          <td>~2.100 L</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section id="waitlist">
+  <div class="container">
+    <div class="waitlist-inner">
+      <div class="waitlist-title">Lote 001 — disponible agosto 2026</div>
+      <p class="waitlist-sub">80 unidades en total. Lista de espera abierta ahora. Notificamos con 7 días de anticipación al lanzamiento.</p>
+
+      <form id="wlForm" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" placeholder="Tu nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input type="email" id="email" placeholder="correo@ejemplo.com" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="ciudad">Ciudad</label>
+            <input type="text" id="ciudad" placeholder="Pereira, Bogotá...">
+          </div>
+          <div class="form-group">
+            <label for="interes">Interés principal</label>
+            <select id="interes">
+              <option value="">Seleccionar...</option>
+              <option value="consumo">Consumo personal</option>
+              <option value="b2b">Compra mayorista / B2B</option>
+              <option value="suplementos">Tienda o suplementos</option>
+              <option value="exportacion">Exportación</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" class="form-submit">Unirse a lista de espera</button>
+        <p class="form-note">Sin spam. Solo una notificación cuando el lote esté disponible.</p>
+      </form>
+      <div class="success-msg" id="successMsg">
+        Listo. Te contactamos antes del lanzamiento de Lote 001.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <a href="#" class="footer-logo">QR<span>Y</span>O</a>
+    <ul class="footer-links">
+      <li><a href="#productos">Productos</a></li>
+      <li><a href="#origen">Origen</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#nutricion">Nutrición</a></li>
+    </ul>
+    <span class="footer-copy">© 2026 QRYO · Eje Cafetero, Colombia</span>
+  </div>
+</footer>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('wlForm').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+}
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id;
+  });
+  navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? '#EDE9DF' : '';
+  });
+}, { passive: true });
+</script>
+
+</body>
+</html>
